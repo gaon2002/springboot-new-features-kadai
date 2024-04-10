@@ -12,20 +12,27 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+// 検索機能
 import org.springframework.web.bind.annotation.RequestParam;
 
+// DBフィールドとビュー・アプリ側のフィールドを関連付けるファイル
 import com.example.samuraitravel.entity.House;
+// フォームビューで入力されたデータを受け取るファイル
+import com.example.samuraitravel.form.HouseRegisterForm;
+// DBをCRUD処理するリポジトリーファイル
 import com.example.samuraitravel.repository.HouseRepository;
 
-// コントローラー(モデルとビューを制御する。ユーザー、モデル、ビューの橋渡し。)
+
 
 // 管理者用　民宿ページ
 
 
-@Controller
-// このコントローラー内の書くメソッドが担当するURLは("")で指定したものになる
+@Controller		// コントローラー(モデルとビューを制御する。ユーザー、モデル、ビューの橋渡し。)
+
+// @RequestMappinngでこのコントローラー内に書くメソッドが担当するURLは("")で指定したものになる
 // 各メソッドに共通のパス（今回の場合は「/admin/houses」）を繰り返し記述する必要がなくなる
-@RequestMapping("/admin/houses")	
+@RequestMapping("/admin/houses")	// 下に記述される＠GetMappingはファイル名を直接書くだけでよくなる
+
 public class AdminHouseController {
 	// コンストラクタインジェクション
 	
@@ -44,6 +51,7 @@ public class AdminHouseController {
 		this.houseRepository = houseRepository;
 	}
 	
+	
 	@GetMapping
 	// findAll()で全ての民宿データを取得し、ビューにデータを渡す
 	// コントローラからビューにデータを渡す場合、モデルクラスを使う
@@ -57,8 +65,9 @@ public class AdminHouseController {
 		// 全てのデータを表示させる場合は、findAll()にPageableオブジェクトを渡す
 		// Page<House> housePage = houseRepository.findAll(pageable);
 		
-		Page<House> housePage;
+		Page<House> housePage;	//フィールド設定
 		
+		// フィールドの初期化：ifを使って、keywordがある場合とない場合で設定を分ける		
 		// keywordパラメターが存在するかどうかで処理を分ける
 		// keywordパラメターが存在する場合、部分一致を行う
 		if(keyword != null && !keyword.isEmpty()) {
@@ -67,29 +76,51 @@ public class AdminHouseController {
 			housePage = houseRepository.findAll(pageable);
 		}
 		
-		// Modelクラスを使ってViewにデータを返す
+		// Modelクラスを使ってViewとコントローラーのデータの橋渡しを作る
 		// 第１引数：ビュー側から参照する変数名("housePage")
 		// 第２引数：ビューに渡すデータ(housePage)
 		model.addAttribute("housePage", housePage); //ページネーションの時にhosePageに変更、houseのままではだめでしたっけ？
-		// ビューにkeywordを渡す
+		// Modelクラスを使ってViewとコントローラーのデータの橋渡しを作る
+		// 第１引数：ビュー側から参照する変数名("housePage")
+		// 第２引数：ビューに渡すデータ(housePage)
 		model.addAttribute("keyword", keyword);
 		
 		// 出力したデータをビューに返す
 		return "admin/houses/index";
 	}
 	
-	@GetMapping("/{id}")
-	// 引数に@PathVariableアノテーション：URLの一部をその引数にバインドする（割り当てる）ことができる
+	// メソッド：民宿の詳細ページを表示する
+	@GetMapping("/{id}")	//URLにあるidの値を取得する
+	// 引数に@PathVariableアノテーションを設定：URLの一部をその引数にバインドする（割り当てる）ことができる
 	// URLを変数のように扱い、コントローラー内でその値(以下のメソッドの場合"id")を利用することが可能
 	public String show(@PathVariable(name = "id") Integer id, Model model){
 		
+		// URLのidと一致する民宿データを１つ取得する
 		// データ取得するために、getReferenceById()メソッドを使う
-		// HouseRepositoryインタフェースのgetReferenceById()メソッドを使い、URLのidと一致する民宿データを１つ取得する
 		House house = houseRepository.getReferenceById(id);
 		
+		// 取得した民宿データとビューの引数と関連付け
+		// Modelクラスを使ってViewとコントローラーのデータの橋渡しを作る
+		// 第１引数：ビュー側から参照する変数名("housePage")
+		// 第２引数：ビューに渡すデータ(housePage)
 		model.addAttribute("house", house);
 		
+		// 出力したデータをビューに返す
 		return "admin/houses/show";
 	}
-
+	
+	// メソッド：ビューで入力されたデータをHouseRegisterForで受け取る
+	@GetMapping("/register")	//@GetMappingはメソッドとGETの処理を行うURLを紐づける役割。
+	public String register(Model model) {
+		
+		// Modelクラスを使ってViewとコントローラーのデータの橋渡しを作る
+		// 第１引数：ビュー側から参照する変数名("houseRegistrationForm")
+		// 第２引数：ビューに渡すデータはフォームクラスのインスタンスを渡すことになるため、newを行っている
+		//　　フォームクラスを利用するにはコントローラーからビューにそのインスタンスを渡す必要がある
+		//　　利用する=ビューのフォーム入力項目とフォームクラスのフィールドを関連付けること
+		model.addAttribute("houseRegistrationForm", new HouseRegisterForm());
+		
+		return "admin/houses/register";
+		
+	}
 }
