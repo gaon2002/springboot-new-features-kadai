@@ -211,4 +211,17 @@ public class AdminHouseController {
 		// リダイレクト：WebサイトやページのURLを変更した際、古いURLにアクセスしたユーザーを自動的に新しいURLに転送すること
 		return "redirect:/admin/houses";
 	}
+	
+	// 民宿データの削除（DBからも削除する）
+	@PostMapping("/{id}/delete")
+	// index.htmlで削除が選択されたデータのidを引数で受け取る
+	public String delete(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {
+//		houseRepositoryを使ってデータのCRUD処理を行う、deleteById(受け取った引数)メソッドで削除
+		houseRepository.deleteById(id);
+		
+		redirectAttributes.addFlashAttribute("successMessage", "民宿を削除しました。");
+		
+		return "redirect:/admin/houses";
+	}
+	
 }
