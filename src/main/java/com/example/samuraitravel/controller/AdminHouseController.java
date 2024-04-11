@@ -22,6 +22,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 // DBフィールドとビュー・アプリ側のフィールドを関連付けるファイル
 import com.example.samuraitravel.entity.House;
+// 民宿データの更新で入力されたデータを受け取るファイル
+import com.example.samuraitravel.form.HouseEditForm;
 // フォームビューで入力されたデータを受け取るファイル
 import com.example.samuraitravel.form.HouseRegisterForm;
 // DBをCRUD処理するリポジトリーファイル
@@ -119,7 +121,7 @@ public class AdminHouseController {
 		return "admin/houses/show";
 	}
 	
-	// メソッド：ビューで入力されたデータをHouseRegisterForで受け取る
+	// メソッド：ビューで入力されたデータをHouseRegisterFormで受け取る
 	@GetMapping("/register")	//@GetMappingはメソッドとGETの処理を行うURLを紐づける役割。
 	public String register(Model model) {
 		
@@ -138,7 +140,7 @@ public class AdminHouseController {
 	@PostMapping("/create")	// HTTPリクエストのPOSTメソッド送信先パスをメソッドに指定する
 	
 	// メソッド：フォームの入力内容をcreate.htmlに返す
-	// @ModelAttribute：フォームから送信されたデータ(フォームクラス インスタンス)をその引数にバインドする
+	// @ModelAttribute：フォームから送信されたデータ(フォームクラス インスタンス)をその引数にバインドすることで、フォームのデータを参照することができる
 	// @Validated： 引数(フォームクラス インスタンス)に対してバリデーションができる
 	// エラーが発生したらBindingResultオブジェクトに格納される
 	// BindingResult型 引数： メソッドにこの引数を設定することで、バリデーションエラー内容がその引数に格納される
@@ -156,6 +158,55 @@ public class AdminHouseController {
 		// 　第1引数：リダイレクト先から参照する変数名
 		// 　第2引数：リダイレクト先に渡すデータ
 		redirectAttributes.addFlashAttribute("successMessage", "民宿を登録しました");
+		// 民宿一覧にリダイレクトする
+		// リダイレクト：WebサイトやページのURLを変更した際、古いURLにアクセスしたユーザーを自動的に新しいURLに転送すること
+		return "redirect:/admin/houses";
+	}
+	
+	@GetMapping("/{id}/edit")
+	
+	// メソッド：民宿データを編集する（編集用htmlへデータを渡すまで）
+	public String edit(@PathVariable(name = "id") Integer id, Model model) {
+		// URLのidと一致する民宿データを取得する
+		// getReferenceById()メソッドの引数にidを使い、該当する民宿データを取得し、変数houseに代入
+		House house= houseRepository.getReferenceById(id);
+		
+		// 民宿画像のファイル名(画像ファイル)を取得する
+		String imageName = house.getImageName();
+		
+		// Editフォームクラスをインスタンス化する
+		HouseEditForm houseEditForm = new HouseEditForm(house.getId(), house.getName(), null, house.getDescription(), house.getPrice(), house.getCapacity(), house.getPostalCode(), house.getAddress(), house.getPhoneNumber());
+				
+		// 民宿画像のファイル名をビューに渡す　(ファイル名を渡せばよいので、MultpartFile型のファイルを直接渡す必要はない)
+		model.addAttribute("imageName", imageName);
+		// インスタンス化したhouseEditFormデータをビュー(edit.html)に渡す
+		model.addAttribute("houseEditForm", houseEditForm);
+		
+		return "admin/houses/edit";
+		
+	}
+	
+	@PostMapping("/{id}/update")	// HTTPリクエストのPOSTメソッド送信先パスをメソッドに指定する
+	
+	// メソッド：編集されたデータを送信し、DB更新する
+	// @ModelAttribute：フォームから送信されたデータ(フォームクラス インスタンス)をその引数にバインドすることで、フォームのデータを参照することができる
+	// @Validated： 引数(フォームクラス インスタンス)に対してバリデーションができる
+	// エラーが発生したらBindingResultオブジェクトに格納される
+	// BindingResult型 引数： メソッドにこの引数を設定することで、バリデーションエラー内容がその引数に格納される
+	public String update(@ModelAttribute @Validated HouseEditForm houseEditForm, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+			// if文の条件式にBindingResultインタフェースが提供するhasErrors()メソッドを使う
+		if (bindingResult.hasErrors()) {
+			// エラーが存在する場合は民宿登録ページを表示する
+			return "admin/houses/edit";
+		}
+		
+		// エラーがなければ、houseServiceのcreate()メソッドを実行し、民宿を登録する
+		houseService.update(houseEditForm);
+		// redirectAttributesインタフェースのaddFlashAttribute()メソッド：リダイレクト先にデータを渡す
+		// 以下はリダイレクトさせるときにメッセージを表示させるケース：
+		// 　第1引数：リダイレクト先から参照する変数名
+		// 　第2引数：リダイレクト先に渡すデータ
+		redirectAttributes.addFlashAttribute("successMessage", "民宿情報を編集しました");
 		// 民宿一覧にリダイレクトする
 		// リダイレクト：WebサイトやページのURLを変更した際、古いURLにアクセスしたユーザーを自動的に新しいURLに転送すること
 		return "redirect:/admin/houses";

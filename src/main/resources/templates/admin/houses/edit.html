@@ -5,8 +5,7 @@
 		
 		<div th:replace="~{fragment :: styles}"></div>
 		
-		<title>民宿登録</title>
-		
+		<title>民宿情報編集</title>
 	</head>
 	<body>
 		<div class="samuraitravel-wrapper">
@@ -17,24 +16,31 @@
 				<div class="container pt-4 pb-5 samuraitravel-container">
 					<div class="row justify-content-center">
 						<div class="col-xl-5 col-lg-6 col-md-8">
+							
 <!--						パンくずリスト：style="--bs-breadcrumb-divider: '>';"はパンくずリストの区切り文字-->
 							<nav class="mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
 								<ol class="breadcrumb mb-0">
 									<li class="breadcrumb-item"><a th:href="@{/admin/houses}">民宿一覧</a></li>
-									<li class="breadcrumb-item active" aria-current="page">民宿登録</li>
+									<li class="breadcrumb-item"><a th:href="@{/admin/houses/__${houseEditForm.getId()}__}">民宿詳細</a></li>
+									<li class="breadcrumb-item active" aria-current="page">民宿情報編集</li>
 								</ol>
 							</nav>
 							
-							<h1 class="mb-4 text-center">民宿一覧</h1>
+							<h1 class="mb-4 text-center">民宿情報編集</h1>
 							
-<!--							formy要素の説明-->
+<!--							form要素の説明-->
 <!--							・form要素の属性にpostを指定：get/postを指定できる-->
 <!--								HTML GET：単純にページを表示する場合など、サーバーから情報を取得するためにs￥使う-->
 <!--								HTML POST：フォーム入力内容を送信して、データの作成や更新を行う場合など、サーバー上のデータを変更するために使う-->
 <!--							・form要素にth:object属性：コントローラーから受け取ったインスタンスを指定する-->
 <!--								インスタンスを受け取ることで、入力項目とフォームクラスのフィールドを関連付けできるようになる-->
 <!--							・form要素のenctype属性：フォーム入力内容を送信するためのエンコードタイプを指定-->
-							<form method="post" th:action="@{/admin/houses/create}" th:object="${houseRegisterForm}" enctype="multipart/form-data">
+							<form method="post" th:action="@{/admin/houses/__${houseEditForm.getId()}__/update}" th:object="${houseEditForm}" enctype="multipart/form-data">
+
+<!--							どのデータを更新するかを指定するため、id情報もeditページに渡す(type=hiddenでビュー上には表示されない)-->
+								<input type="hidden" th:field="*{id}">
+								
+								
 <!--							row: Bootstrapのグリッドシステムを使用して、水平方向に要素を配置するためのクラス-->
 <!--							民宿名の入力-->
 								<div class="form-group row mb-3">
@@ -48,10 +54,11 @@
 										<div th:if="${#fields.hasErrors('name')}" class="text-danger small mb-2" th:errors="*{name}"></div>
 										
 <!--									th:field属性　各入力項目とフォームクラスのフィールドを関連付けさせる-->
-<!--										th:fieldを設定するとid属性も同じ値になる-->
+<!--										th:fieldを設定するとid属性も同じ値になり、そのフィールドに値が入っている場合は、その値がvalue属性に設定される-->
 										<input type="text" class="form-control" th:field="*{name}" autofocus>
 									</div>
 								</div>	
+								
 									
 <!--							民宿画像のアップロード-->
 								<div class="form-group row mb-3">
@@ -63,9 +70,12 @@
 										<input type="file" class="form-control" th:field="*{imageFile}">
 									</div>
 								</div>
+								
 <!--								選択された画像の表示場所-->
-									<div class="row" id="imagePreview"></div>
-
+									<div th:if="${imageName}" class="row" id="imagePreview"><img th:src="@{/strage/__${imageName}__}" class="mb-3"></div>
+									<div th:unless="${imageName}" class="row" id="imagePreview"></div>
+									
+									
 <!--							説明入力-->
 								<div class="form-group row mb-3">
 									<div class="col-md-4">
@@ -89,6 +99,7 @@
 									</div>
 								</div>
 									
+									
 <!--							定員入力-->
 								<div class="form-group row mb-3">
 									<div class="col-md-4">
@@ -99,6 +110,7 @@
 										<input type="number" class="form-control" th:field="*{capacity}">
 									</div>
 								</div>
+								
 								
 <!--							郵便番号入力-->
 								<div class="form-group row mb-3">
@@ -111,6 +123,7 @@
 									</div>
 								</div>
 								
+								
 <!--							住所入力-->
 								<div class="form-group row mb-3">
 									<div class="col-md-4">
@@ -121,6 +134,7 @@
 										<input type="text" class="form-control" th:field="*{address}">
 									</div>
 								</div>
+
 
 <!--							電話番号入力-->
 								<div class="form-group row mb-3">

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.samuraitravel.entity.House;
+import com.example.samuraitravel.form.HouseEditForm;
 import com.example.samuraitravel.form.HouseRegisterForm;
 import com.example.samuraitravel.repository.HouseRepository;
 
@@ -27,8 +28,9 @@ public class HouseService {
 	}
 	
 	@Transactional	// Transactionalアノテーションをつけることで、以下のメソッドをトランザクション化できる
+	
 	// メソッド：データの登録処理。　データベースの操作(更新、変更、取り消し)を行う。
-	// 引数にフォームクラスのインスタンスをセットし、register.htmlから受け取った値を取得できるようにする。
+	// 		引数にフォームクラスのインスタンスをセットし、register.htmlから受け取った値を取得できるようにする。
 	public void create(HouseRegisterForm houseRegisterForm) {
 		// エンティティ(Houseクラス)をインスタンス化し、値をセット
 		House house = new House();
@@ -61,6 +63,48 @@ public class HouseService {
 		house.setPostalCode(houseRegisterForm.getPostalCode());
 		house.setAddress(houseRegisterForm.getAddress());
 		house.setPhoneNumber(houseRegisterForm.getPhoneNumber());
+		
+		// save()：エンティティを保存する
+		houseRepository.save(house);
+		
+	}
+	
+@Transactional	// Transactionalアノテーションをつけることで、以下のメソッドをトランザクション化できる
+	
+	// メソッド：データの更新処理。　データベースの操作(更新、変更、取り消し)を行う。
+	// 		引数にEditフォームクラスのインスタンスをセットし、edit.htmlから受け取った値を取得できるようにする。
+	public void update(HouseEditForm houseEditForm) {
+		// idを使って更新するエンティティを取得し、値をセット
+		// RepositoryのCRUD処理で、DBから情報を取得
+		House house = houseRepository.getReferenceById(houseEditForm.getId());
+				
+		// register.htmlから受け取った値をゲッターで取得、MultipartFileクラス型の変数imageFileに代入
+		   MultipartFile imageFile = houseEditForm.getImageFile();
+		
+		// 送信された画像ファイルをstorageに保存する
+		if(!imageFile.isEmpty()) {
+			// 元のファイル名を取得する　getOriginalFileName()
+			String imageName = imageFile.getOriginalFilename();
+			// ファイル名の変更処理(ファイル名が重複しないように、generateNewFileName()で自動起生)
+			String hashedImageName = generateNewFileName(imageName);
+			
+			// コピーを保管するパスを設定、Pathクラス型の変数filePathに代入
+			Path filePath = Paths.get("src/main/resources/static/storage/" + hashedImageName);
+			// ファイルのコピー処理
+			copyImageFile(imageFile, filePath);
+			// セッターを使って、エンティティにファイル名をセットする
+			house.setImageName(hashedImageName);
+		}
+		
+		// register.htmlから受け取った値をゲッターで取得
+		// セッターを使ってエンティティー(Houseクラス)の各フィールドにセットする
+		house.setName(houseEditForm.getName());
+		house.setDescription(houseEditForm.getDescription());
+		house.setPrice(houseEditForm.getPrice());
+		house.setCapacity(houseEditForm.getCapacity());
+		house.setPostalCode(houseEditForm.getPostalCode());
+		house.setAddress(houseEditForm.getAddress());
+		house.setPhoneNumber(houseEditForm.getPhoneNumber());
 		
 		// save()：エンティティを保存する
 		houseRepository.save(house);
