@@ -9,11 +9,16 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 // 検索機能
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 // DBフィールドとビュー・アプリ側のフィールドを関連付けるファイル
 import com.example.samuraitravel.entity.House;
@@ -21,6 +26,8 @@ import com.example.samuraitravel.entity.House;
 import com.example.samuraitravel.form.HouseRegisterForm;
 // DBをCRUD処理するリポジトリーファイル
 import com.example.samuraitravel.repository.HouseRepository;
+// Serviceクラス
+import com.example.samuraitravel.service.HouseService;
 
 
 
@@ -43,12 +50,15 @@ public class AdminHouseController {
 	// このプロキシのインスタンスをDIコンテナに登録することで依存性の注入を実現。
 	private final HouseRepository houseRepository;
 	
+	private final HouseService houseService;
+	
 	// ➁コンストラクター
 	// DIコンテナに登録されたインスタンスをコンストラクタに対して依存性(DI)注入する(コンストラクタインジェクション)
 	// AdminHouseControllerはHouseRepositoryに依存している
 	
-	public AdminHouseController(HouseRepository houseRepository) {
+	public AdminHouseController(HouseRepository houseRepository, HouseService houseService) {
 		this.houseRepository = houseRepository;
+		this.houseService = houseService;
 	}
 	
 	
@@ -118,9 +128,36 @@ public class AdminHouseController {
 		// 第２引数：ビューに渡すデータはフォームクラスのインスタンスを渡すことになるため、newを行っている
 		//　　フォームクラスを利用するにはコントローラーからビューにそのインスタンスを渡す必要がある
 		//　　利用する=ビューのフォーム入力項目とフォームクラスのフィールドを関連付けること
-		model.addAttribute("houseRegistrationForm", new HouseRegisterForm());
+		model.addAttribute("houseRegisterForm", new HouseRegisterForm());
 		
 		return "admin/houses/register";
 		
+	}
+	
+	
+	@PostMapping("/create")	// HTTPリクエストのPOSTメソッド送信先パスをメソッドに指定する
+	
+	// メソッド：フォームの入力内容をcreate.htmlに返す
+	// @ModelAttribute：フォームから送信されたデータ(フォームクラス インスタンス)をその引数にバインドする
+	// @Validated： 引数(フォームクラス インスタンス)に対してバリデーションができる
+	// エラーが発生したらBindingResultオブジェクトに格納される
+	// BindingResult型 引数： メソッドにこの引数を設定することで、バリデーションエラー内容がその引数に格納される
+	public String create(@ModelAttribute @Validated HouseRegisterForm houseRegisterForm, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+			// if文の条件式にBindingResultインタフェースが提供するhasErrors()メソッドを使う
+		if (bindingResult.hasErrors()) {
+			// エラーが存在する場合は民宿登録ページを表示する
+			return "admin/houses/register";
+		}
+		
+		// エラーがなければ、houseServiceのcreate()メソッドを実行し、民宿を登録する
+		houseService.create(houseRegisterForm);
+		// redirectAttributesインタフェースのaddFlashAttribute()メソッド：リダイレクト先にデータを渡す
+		// 以下はリダイレクトさせるときにメッセージを表示させるケース：
+		// 　第1引数：リダイレクト先から参照する変数名
+		// 　第2引数：リダイレクト先に渡すデータ
+		redirectAttributes.addFlashAttribute("successMessage", "民宿を登録しました");
+		// 民宿一覧にリダイレクトする
+		// リダイレクト：WebサイトやページのURLを変更した際、古いURLにアクセスしたユーザーを自動的に新しいURLに転送すること
+		return "redirect:/admin/houses";
 	}
 }
