@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ja">
 	<head>
 		<div th:replace="~{fragment :: meta}"></div>
 		
@@ -33,6 +33,7 @@
 <!--								HTML GET：単純にページを表示する場合など、サーバーから情報を取得するためにs￥使う-->
 <!--								HTML POST：フォーム入力内容を送信して、データの作成や更新を行う場合など、サーバー上のデータを変更するために使う-->
 <!--							・form要素にth:object属性：コントローラーから受け取ったインスタンスを指定する-->
+<!--							・th:action属性：Contorollerのどのメソッドに対してデータを送るかを指定(Contoroller側では『@PostMapping("/{id}/update")』で紐づけしている	)-->
 <!--								インスタンスを受け取ることで、入力項目とフォームクラスのフィールドを関連付けできるようになる-->
 <!--							・form要素のenctype属性：フォーム入力内容を送信するためのエンコードタイプを指定-->
 							<form method="post" th:action="@{/admin/houses/__${houseEditForm.getId()}__/update}" th:object="${houseEditForm}" enctype="multipart/form-data">
@@ -72,14 +73,14 @@
 								</div>
 								
 <!--								選択された画像の表示場所-->
-									<div th:if="${imageName}" class="row" id="imagePreview"><img th:src="@{/strage/__${imageName}__}" class="mb-3"></div>
+									<div th:if="${imageName}" class="row" id="imagePreview"><img th:src="@{/storage/__${imageName}__}" class="mb-3"></div>
 									<div th:unless="${imageName}" class="row" id="imagePreview"></div>
 									
 									
 <!--							説明入力-->
 								<div class="form-group row mb-3">
 									<div class="col-md-4">
-										<label for="description" class="col-form-label text-md-left fw-bold">住所</label>
+										<label for="description" class="col-form-label text-md-left fw-bold">説明</label>
 									</div>
 									<div class="col-md-8">
 										<div th:if="${#fields.hasErrors('description')}" class="text-danger small mb-2" th:errors="*{description}"></div>
@@ -91,7 +92,7 @@
 <!--							宿泊料金入力-->
 								<div class="form-group row mb-3">
 									<div class="col-md-4">
-										<label for="price" class="col-form-label text-md-left fw-bold">民宿料金 (単位：円)</label>
+										<label for="price" class="col-form-label text-md-left fw-bold">宿泊料金 (単位：円)</label>
 									</div>
 									<div class="col-md-8">
 										<div th:if="${#fields.hasErrors('price')}" class="text-danger small mb-2" th:errors="*{price}"></div>
@@ -103,7 +104,7 @@
 <!--							定員入力-->
 								<div class="form-group row mb-3">
 									<div class="col-md-4">
-										<label for="price" class="col-form-label text-md-left fw-bold">定員 (単位：人)</label>
+										<label for="capacity" class="col-form-label text-md-left fw-bold">定員 (単位：人)</label>
 									</div>
 									<div class="col-md-8">
 										<div th:if="${#fields.hasErrors('capacity')}" class="text-danger small mb-2" th:errors="*{capacity}"></div>
@@ -148,7 +149,7 @@
 								</div>
 									
 								<div class="form-group d-flex justify-content-center my-4">
-									<button type="submit" class="btn text-white shadow-sm w-50 samuraitravel-btn">登録</button>
+									<button type="submit" class="btn text-white shadow-sm w-50 samuraitravel-btn">更新</button>
 								</div>
 							</form>
 						</div>

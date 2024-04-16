@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ja">
 	<head>
 		<div th:replace="~{fragment :: meta}"></div>
 		
@@ -32,6 +32,7 @@
 <!--								HTML GET：単純にページを表示する場合など、サーバーから情報を取得するためにs￥使う-->
 <!--								HTML POST：フォーム入力内容を送信して、データの作成や更新を行う場合など、サーバー上のデータを変更するために使う-->
 <!--							・form要素にth:object属性：コントローラーから受け取ったインスタンスを指定する-->
+<!--							・th:action属性：Contorollerのどのメソッドに対してデータを送るかを指定(Contoroller側では『@PostMapping("/create")』で紐づけしている	)-->
 <!--								インスタンスを受け取ることで、入力項目とフォームクラスのフィールドを関連付けできるようになる-->
 <!--							・form要素のenctype属性：フォーム入力内容を送信するためのエンコードタイプを指定-->
 							<form method="post" th:action="@{/admin/houses/create}" th:object="${houseRegisterForm}" enctype="multipart/form-data">
@@ -92,7 +93,7 @@
 <!--							定員入力-->
 								<div class="form-group row mb-3">
 									<div class="col-md-4">
-										<label for="price" class="col-form-label text-md-left fw-bold">定員 (単位：人)</label>
+										<label for="capacity" class="col-form-label text-md-left fw-bold">定員 (単位：人)</label>
 									</div>
 									<div class="col-md-8">
 										<div th:if="${#fields.hasErrors('capacity')}" class="text-danger small mb-2" th:errors="*{capacity}"></div>

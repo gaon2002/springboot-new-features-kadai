@@ -2,7 +2,7 @@
 
 <!DOCTYPE html>
  <!-- Thymeleaf適用 -->
-<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ja">
     <head>
 <!--		部品化したth:fragment読み込み-->
 		<div th:replace="~{fragment :: meta}"></div>
@@ -43,7 +43,7 @@
                             
                             <h1 class="mb-4 text-center">民宿一覧</h1>   
                             
-                            <div class="d-flex justify-content-between aline-items-end flex-wrap">
+                            <div class="d-flex justify-content-between align-items-end flex-wrap">
 								<form method="get" th:action="@{/admin/houses}" class="mb-3">
 									<div class="input-group">
 										<input type="text" class="form-control" name="keyword" th:value="${keyword}" placeholder="民宿名">
@@ -83,7 +83,7 @@
                                         <td th:text="${house.getPhoneNumber()}"></td>
                                         <td><a th:href="@{/admin/houses/__${house.getId()}__}">詳細</a></td>
                                         
-<!--                                    data-bs-toggle：Bootstrapでモーダルウィンドウを作成する際の様式、もーだうを作成する際は属性に"modal"を指定-->
+<!--                                    data-bs-toggle：Bootstrapでモーダルウィンドウを作成する際の様式、モーダルを作成する際は属性に"modal"を指定-->
 <!--                                    th:data-bs-target="${'#deleteHouseModal' + house.getId()}"：deleteHouseModalウィンドウが呼び出される 繰り返し処理を行うので、getIdで該当データを読み込めるようにしている-->
 <!--									　属性の先頭に『th:』を付けることで値に変数を使用できる -->
                                         
@@ -119,7 +119,7 @@
 										<li class="page-item">
 										<!-- th:if　で条件分岐させる、条件式はisFirst()メソッドを使う -->
 											
-											<span th:if="${housePage.isFirst()}" class="page-link disable">前</span>
+											<span th:if="${housePage.isFirst()}" class="page-link disabled">前</span>
 											<!-- th:hrefの属性にpageパラメタを付ける
 											   th:unlssは条件式がfalseの時に適用される
 											   th:href、getNumber()メソッドを使って現在のページ番号を取得し、そこから1を減産して１つ前のページへのリンクを作成-->

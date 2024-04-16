@@ -1,5 +1,6 @@
 package com.example.samuraitravel.controller;
 
+
 //ページネーションを実現するクラス
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,6 +9,8 @@ import org.springframework.data.domain.Sort.Direction;
 //ページリンクを実現するクラス
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
+// Modelオブジェクト: Springが用意するMapオブジェクトで、Viewに渡すオブジェクトを設定。
+// Model: クライアント側のリクエスト情報に含まれるブラウザからの情報(沢山ある中から選べるようにする)
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -56,15 +59,16 @@ public class AdminHouseController {
 	
 	// ➁コンストラクター
 	// DIコンテナに登録されたインスタンスをコンストラクタに対して依存性(DI)注入する(コンストラクタインジェクション)
-	// AdminHouseControllerはHouseRepositoryに依存している
 	
+	// AdminHouseControllerはHouseRepositoryに依存している
+
 	public AdminHouseController(HouseRepository houseRepository, HouseService houseService) {
 		this.houseRepository = houseRepository;
 		this.houseService = houseService;
 	}
 	
 	
-	@GetMapping
+	@GetMapping		// パスを書かなくてよい
 	// findAll()で全ての民宿データを取得し、ビューにデータを渡す
 	// コントローラからビューにデータを渡す場合、モデルクラスを使う
 	// メソッド内にModel型の引数、メンバー変数modelを指定
@@ -165,7 +169,7 @@ public class AdminHouseController {
 	
 	@GetMapping("/{id}/edit")
 	
-	// メソッド：民宿データを編集する（編集用htmlへデータを渡すまで）
+	// メソッド：民宿データを編集する（edit.htmlへデータを渡すまで）
 	public String edit(@PathVariable(name = "id") Integer id, Model model) {
 		// URLのidと一致する民宿データを取得する
 		// getReferenceById()メソッドの引数にidを使い、該当する民宿データを取得し、変数houseに代入

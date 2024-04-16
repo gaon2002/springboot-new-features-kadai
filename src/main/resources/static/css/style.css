@@ -37,9 +37,12 @@ footer{
 .samuraitravel-logo{
 	height: 30px;
 }
+
 .samuraitravel-btn{
 	background-color: #5196a6 !important;
+	transition: 0.1s;
 }
+
 .samuraitravel-btn:hover{
 	opacity:0.8;
 }
@@ -52,10 +55,10 @@ footer{
 }
 .samuraitravel-active{
 	background-color: #5196a6 !important;
-	border-color: #5106a6 !important;
+	border-color: #5196a6 !important;
 }
 .samuraitravel-pre-wrap{
-	/*改行文字で行を繰り返す*/
+	/*改行文字で行を折り返す*/
 	white-space: pre-wrap;
 }
 
@@ -72,6 +75,9 @@ footer{
 }
 .samuraitravel-btn-danger:hover{
 	opacity: 0.8;
+}
+.samuraitravel-dropdpwn-item:active{
+	background-color: #5196a6;
 }
 
 

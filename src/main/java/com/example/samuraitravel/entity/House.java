@@ -10,7 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 
-@Entity					// エンティティーとして機能する
+@Entity					// housesテーブルと紐づけるエンティティーとして機能させる
 @Table(name = "houses")	// 対応づける（参照する）テーブル名を指定
 @Data					// ゲッターやセッターを自動生成する(Lombokが提供する機能)
 public class House {
@@ -43,10 +43,10 @@ public class House {
 	@Column(name = "phone_number")
 	private String phoneNumber;
 	
-	@Column(name = "create_at", insertable = false, updatable = false)
+	@Column(name = "created_at", insertable = false, updatable = false)
 	private Timestamp createdAt;
 	
-	@Column(name = "update_at", insertable = false, updatable = false)
+	@Column(name = "updated_at", insertable = false, updatable = false)
 	private Timestamp updatedAt;
 	
 	

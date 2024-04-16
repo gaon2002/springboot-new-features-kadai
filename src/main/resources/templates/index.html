@@ -1,13 +1,43 @@
 <!DOCTYPE html>
-// ビューを作成
-// xmlns:th = 「このファイルではThymeleafを利用します」を宣言する意味
-<html xmlns:th="http://www.thymeleaf.org">
+<!--ビューを作成-->
+<!--xmlns:th = 「このファイルではThymeleafを利用します」を宣言する意味-->
+<html xmlns:th="https://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ja">
 	<head>
-		<meta charaset="UTF-8">
-		<meta name="viweport" content="width=device-width, initial-scale-1">
-		<title>SAMURAI Traval</title>
+		<div th:replace="~{fragment :: meta}"></div>
+		<div th:replace="~{fragment :: styles}"></div>
+		
+		<title>SAMURAI Travel</title>
 	</head>
 	<body>
-		<p>Hello World</p>
+		<div class="samuraitravel-wrapper">
+<!--		ヘッダー-->
+			<div th:replace="~{fragment :: header}"></div>
+			
+			<main>
+				<div class="container pt-4 pb-5 samuraitravel-container">
+<!--				th:if属性に"${param.loggedIn}"を指定し、errorパラメータが存在する場合にのみエラーメッセージが表示される-->
+					<div th:if="${param.loggedIn}" class="alert alert-info">
+						ログインしました。
+					</div>
+					
+					<div th:if="${param.loggedOut}" class="alert alert-info">
+						ログアウトしました。
+					</div>
+					
+					<div th:if="${successMessage}" class="alert alert-info">
+						<span th:text="${successMessage}"></span>
+					</div>
+					
+					
+				</div>
+			</main>
+<!--		フッター-->
+			<div th:replace="~{fragment :: footer}"></div>
+						
+		</div>
+		<div th:replace="~{fragment :: scripts}"></div>
+		
+		
+		
 	</body>
 </html>

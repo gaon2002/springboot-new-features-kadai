@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ja">
 	<head>
 <!--		<meta>HTML要素の読み込み-->
 		<div th:replace="~{fragment :: meta}"></div>
@@ -35,19 +35,21 @@
 <!--				</a>-->
 <!--			</div>-->
 <!--		</nav>-->
+
+		<main>
 		
 		<div class="container pt-4 pb-5 samuraitravel-container">
 			<div class="row justify-content-center">
 				<div class="col-xl-5 col-lg-6 col-md-8">
-					<nav class="mb-4" style="--bs-breadcrumb-divider : '>'" arial-label="breadcrumb">
+					<nav class="mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
 						<ol class="breadcrumb mb-0">
 							<li class="breadcrumb-item"><a th:href="@{/admin/houses}">民宿一覧</a></li>
-							<li class="breadcrumb-item active" arial-current="page">民宿詳細</a></li>
+							<li class="breadcrumb-item active" aria-current="page">民宿詳細</li>
 							
 						</ol>
 					</nav>
 					
-					<main>
+
 					
 					<h1 class="mb-4 text-center" th:text="${house.getName()}"></h1>
 					
@@ -62,7 +64,7 @@
 						<!-- パスの変数設定：__$(変数)__ 　アンダースコア２つずつで変数名を囲む-->
 						
 						<img th:if="${house.getImageName()}" th:src="@{/storage/__${house.getImageName()}__}" class="w-100" alt="民宿画像">
-						<img th:unless="${house.getImageName()}" the:src="@{/images/noImage.png}" class="w-100" alt="NO IMAGE">
+						<img th:unless="${house.getImageName()}" th:src="@{/images/noImage.png}" class="w-100" alt="NO IMAGE">
 					</div>
 					
 					<!-- ID表示 -->
