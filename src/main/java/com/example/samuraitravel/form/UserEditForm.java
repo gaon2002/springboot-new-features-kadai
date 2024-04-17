@@ -7,6 +7,9 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor		// 全フィールドに値をセットするための引数付きコンストラクタを自動生成できる
+
+// フォームクラスは書く入力項目に対応するフィールド設定、ゲッター・セッターの定義(@Data)、
+
 public class UserEditForm {
 	@NotNull
 	private Integer id;

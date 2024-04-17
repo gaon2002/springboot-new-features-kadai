@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	<head>
+		<div th:replace="~{fragment :: meta}"></div>
+		<div th:replace="~{fragment :: styles}"></div>
+		
+		<title>会員一覧</title>
+	</head>
+	
+	<body>
+		<div class="samuraitravel-wrapper">
+<!--		ヘッダー-->
+			<div th:replace="~{fragment :: header}"></div>
+			
+			<main>
+				<div class="container pt-4 pb-5 samuraitravel-container">
+					<div class="row justify-content-center">
+						<div class="col-xxl-9 col-xl-10 col-lg-11">
+							
+							<h1 class="mb-4 text-center">会員一覧</h1>
+							
+<!--						・d-：display制御の意味-->
+							<div class="d-flex justify-content-between align-items-end">
+<!--							■検索フォーム-->
+								<form method="get" th:action="@{/admin/users}" class="mb-3">
+									
+									<div class="input-group">
+<!--									・th:value="${keyword}"：サーバーサイドのデータを初期値として埋め込む-->
+										<input type="text" class="form-control" name="keyword" th:value="${keyword}" placeholder="氏名・フリガナ">
+										<button type="submit" class="btn text-white shadow-sm samuraitravel-btn">検索</button>
+									</div>
+								</form>
+							</div>
+							
+							<div th:if="${successMessage}" class="alert alert-info">
+								<span th:text="${successMessage}"></span>
+							</div>
+							
+<!--						■詳細情報表示テーブル-->
+							<table class="table">
+								<thead>
+									<tr>
+										<th scope="col">ID</th>
+										<th scope="col">氏名</th>
+										<th scope="col">フリガナ</th>
+										<th scope="col">メールアドレス</th>
+										<th scope="col"></th>
+									</tr>
+								</thead>
+								<tbody>
+<!--								・tr th:each="user:${userPage}"：繰り返し処理。　Controllerで設定されているuserPageから抽出された各ユーザーの情報を繰り返し表示する。-->
+									<tr th:each="user:${userPage}">
+										<td th:text="${user.getId()}"></td>
+										<td th:text="${user.getName()}"></td>
+										<td th:text="${user.getFurigana()}"></td>
+										<td th:text="${user.getEmail()}"></td>
+<!--									・ユーザーの詳細ページに飛ぶリンク-->
+										<td><a th:href="@{/admin/users/__${user.getId()}__}">詳細</a></td>
+									</tr>
+								</tbody>
+							</table>
+							
+<!--					■ページネーション作成-->
+						<div th:if="${userPage.getTotalPages() > 1}" class="d-flex justify-content-center">
+<!--						・aria-label：ナビゲーションの目的や役割を示す補助的なテキストを提供-->
+							<nav aria-label="会員一覧ページ">
+								<ul class="pagination">
+<!--								■ページネーションの『前』を表示-->
+									<li class="page-item">
+										<span th:if="${userPage.isFirst()}" class="page-link disabled">前</span>
+										<a th:unless="${userPage.isFirst()}" th:href="@{/admin/users(page = ${userPage.getNumber()-1}, keyword = ${keyword})}" class="page-link samuraitravel-page-link">前</a>
+									</li>
+									
+<!--								■ページ表示-->
+									<li th:each="i:${#numbers.sequence(0, userPage.getTotalPages()-1)}" class="page-item">
+<!--									・${i == userPage.getNumber()}"：条件文　ｉが現在のページ番号であればリンクを貼らない：繰り返し処理、ページ番号分表示をする-->
+<!--									・th:text="${i + 1}：リンクないテキストの表示、ページ番号を表示している-->
+										<span th:if="${i == userPage.getNumber()}" class="page-link active samuraitravel-active" th:text="${i + 1}"></span>
+<!--									・現在のページ以外はリンクを貼る：繰り返し処理、ページ番号分表示をする-->
+<!--									・th:href="@{/admin/users(page = ${i}, keyword = ${keyword})}"：ページ番号の部分にリンクをつける-->
+										<a th:unless="${i == userPage.getNumber()}" th:href="@{/admin/users(page = ${1}, keyword = ${keyword})}" class="page-link samuraitravel-link" th:text="${i + 1}"></a>
+									</li>
+									
+<!--								■ページネーションの『後』を表示-->
+									<li class="page-item">
+										<span th:if="${userPage.isLast()}" class="page-link disabled">次</span>
+										<a th:unless="${userPage.isLast()}" th:href="@{/admin/users(page = ${userPage.getNumber() + 1}, keyword = ${keyword})}" class="page-link samuraitravel-page-link">次</a>
+									</li>
+								</ul>
+							</nav>
+						</div>
+						</div>
+					</div>
+				</div>
+			</main>
+<!--		■フッター-->
+			<div th:replace="~{fragment :: footer}"></div>
+		</div>
+		<div th:replace="~{fragment :: scripts}"></div>
+		
+	</body>
+	
+</html>
