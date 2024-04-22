@@ -31,7 +31,7 @@ public class WebSecurityConfig {
 		http
 			.authorizeHttpRequests((requests) -> requests
 					// すべてのユーザーにアクセスを許可するURL。 ()内にルートパスを記述する。
-					.requestMatchers("/css/**", "/images/**", "/js/**", "/storage/**", "/","/signup/**","/houses/{id}").permitAll()
+					.requestMatchers("/css/**", "/images/**", "/js/**", "/storage/**", "/","/signup/**","/houses", "/houses/{id}", "/stripe/webhook").permitAll()
 					// 管理者のみのアクセスを許可するURL
 					.requestMatchers("/admin/**").hasRole("ADMIN")
 					// 上記以外はログインが必要（ロールは問わない）
@@ -54,7 +54,11 @@ public class WebSecurityConfig {
 					// ログアウト時のリダイレクト先URLを設定
 					.logoutSuccessUrl("/?loggedOut")
 					.permitAll()
-			);
+			)
+			// ★CSRFトークンを返すパスはCSRF対策から除外
+			// 　・CSRF（クロス・サイト・リクエスト・フォージェリ）:サイバー攻撃の一種。この攻撃を受けると「ログイン済みユーザーになりすましたアプリやサービスの利用」「アプリやサービスのデータ漏洩（ろうえい）」といった重大な問題が発生
+			// 　・今回のように外部からPOST送信を受ける場合、そのままではCSRF対策のチェックによってアクセスが拒否されてしまうので、「/stripe/webhook」に対するPOST送信についてはCSRF対策のチェックを行わないように設定
+			.csrf(csrf -> csrf.ignoringRequestMatchers("/stripe/webhook"));
 		
 		return http.build();
 	}
