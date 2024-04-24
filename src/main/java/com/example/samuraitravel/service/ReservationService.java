@@ -40,11 +40,11 @@ public class ReservationService {
 		Integer houseId = Integer.valueOf(paymentIntentObject.get("houseId"));
 		Integer userId = Integer.valueOf(paymentIntentObject.get("userId"));
 		
-		//	reservationRegisterForm空ではなく、paymentIntentObjectから呼び出す
+		//	reservationRegisterFormではなく、paymentIntentObjectから呼び出す
 		House house = houseRepository.getReferenceById(houseId);
 		User user = userRepository.getReferenceById(userId);
 		LocalDate checkinDate = LocalDate.parse(paymentIntentObject.get("checkinDate"));
-		LocalDate checkoutDate = LocalDate.parse(paymentIntentObject.get("checkoujtDate"));
+		LocalDate checkoutDate = LocalDate.parse(paymentIntentObject.get("checkoutDate"));
 		Integer numberOfPeople = Integer.valueOf(paymentIntentObject.get("numberOfPeople"));
 		Integer amount = Integer.valueOf(paymentIntentObject.get("amount"));
 		

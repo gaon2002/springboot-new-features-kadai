@@ -23,7 +23,7 @@ public class StripeWebhookController {
 	@Value("${stripe.api-key}")
 	private String stripeApiKey;
 	
-	@Value("stripe.webhook-secret")
+	@Value("${stripe.webhook-secret}")
 	private String webhookSecret;
 	
 	public StripeWebhookController(StripeService stripeService) {
