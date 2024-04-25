@@ -34,13 +34,16 @@ public class StripeService {
 		this.reservationService = reservationService;
 	}
 		
-	// セッションを作成し、Stripeに必要な情報を返す
+	// createStripeSession()メソッド：Stripeに送信する支払い情報をセッションとして作成
 	public String createStripeSession(String houseName, ReservationRegisterForm reservationRegisterForm, HttpServletRequest httpServletRequest) {
 		Stripe.apiKey = stripeApiKey;
+		// ブラウザから入力されたリクエストを受け取る
 		String requestUrl= new String(httpServletRequest.getRequestURL());
 		SessionCreateParams params =
 				SessionCreateParams.builder()
+					// 決済方法（カード）
 					.addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
+					// 
 					.addLineItem(
 							SessionCreateParams.LineItem.builder()
 								.setPriceData(
@@ -55,8 +58,11 @@ public class StripeService {
 								.setQuantity(1L)
 								.build())
 					.setMode(SessionCreateParams.Mode.PAYMENT)
+					// requestUrl：ブラウザから入力されたリクエストの登録が成功したら指定のURLにリダイレクトする
+					// ・支払いが成功したら、指定されたURLから /houses/数字/reservations/confirm という部分を削除し、その後に /reservations?reserved を追加したURLにリダイレクトする
 					.setSuccessUrl(requestUrl.replaceAll("/houses/[0-9]+/reservations/confirm", "") + "/reservations?reserved")
 					.setCancelUrl(requestUrl.replace("/reservations/confirm", ""))
+					// 支払情報を各フィールドにセット
 					.setPaymentIntentData(
 							SessionCreateParams.PaymentIntentData.builder()
 								.putMetadata("houseId", reservationRegisterForm.getHouseId().toString())
@@ -94,7 +100,7 @@ public class StripeService {
 				session = Session.retrieve(session.getId(),params, null);
 				// さらに、取得した詳細なセッション情報からメタデータ（予約情報）を取り出し、
 				Map<String, String> paymentIntentObject = session.getPaymentIntentObject().getMetadata();
-				// それをpaymentObjectとして、ReservationServiceクラスのcreate()メソッドに渡している
+				// それをpaymentObjectとして、ReservationServiceクラスのcreate()メソッドに渡している(DB更新)
 				reservationService.create(paymentIntentObject);
 			}catch(StripeException e) {
 				e.printStackTrace();

@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### propertiesファイルはgit管理対象外 ###
+/src/main/resources/application-development.properties

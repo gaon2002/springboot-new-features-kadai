@@ -221,6 +221,7 @@ public class AdminHouseController {
 	// index.htmlで削除が選択されたデータのidを引数で受け取る
 	public String delete(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {
 //		houseRepositoryを使ってデータのCRUD処理を行う、deleteById(受け取った引数)メソッドで削除
+		
 		houseRepository.deleteById(id);
 		
 		redirectAttributes.addFlashAttribute("successMessage", "民宿を削除しました。");

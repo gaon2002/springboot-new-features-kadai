@@ -85,7 +85,7 @@ public class ReservationController {
 			return "houses/show";
 		}
 		
-		// input()メソッド：入力フォームに問題がなければ、予約内容の確認ページ(confirm())にデータを渡す
+		// 入力フォームに問題がなければ、予約内容の確認ページ(confirm())にデータを渡す
 		redirectAttributes.addFlashAttribute("reservationInputForm", reservationInputForm);
 		
 		return "redirect:/houses/{id}/reservations/confirm";

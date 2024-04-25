@@ -65,6 +65,18 @@ CREATE TABLE IF NOT EXISTS users (
      FOREIGN KEY (user_id) REFERENCES users (id)
  );
  
+  -- レビュー用テーブルを作成
+  CREATE TABLE IF NOT EXISTS reviews (
+     id			 INT			NOT NULL AUTO_INCREMENT PRIMARY KEY,
+     house_id	 INT			NOT NULL,
+     user_id	 INT			NOT NULL,
+     score		 INT			NOT NULL,
+     comment	 VARCHAR(255)	NOT NULL,
+     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+     FOREIGN KEY (house_id) REFERENCES houses (id),
+     FOREIGN KEY (user_id) REFERENCES users (id)
+ );
  
  
  

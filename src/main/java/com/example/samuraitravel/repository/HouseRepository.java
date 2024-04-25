@@ -33,6 +33,8 @@ public interface HouseRepository extends JpaRepository<House, Integer>{
 
 	public List<House> findTop10ByOrderByCreatedAtDesc();
 
+
+
 	
 
 }

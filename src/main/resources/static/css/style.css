@@ -108,6 +108,12 @@ footer{
 	max-width: 300px;
 }
 
+.samuraitravel-star {
+    color: orange;
+}
+
+
+
 @media screen and (min-width: 1400px){
 	.samuraitravel-container{
 		max-width: 1200px;
