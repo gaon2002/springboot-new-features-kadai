@@ -31,14 +31,11 @@ public class ReviewController {
 	private final ReviewRepository reviewRepository;
 	private final ReviewService reviewService;
 	private final HouseRepository houseRepository;
-	private final UserRepository userRepository;
-
 	
 	public ReviewController(UserRepository userRepository, ReviewRepository reviewRepository, ReviewService reviewService, HouseRepository houseRepository) {
 		this.reviewRepository = reviewRepository;
 		this.reviewService = reviewService;
 		this.houseRepository = houseRepository;
-		this.userRepository = userRepository;
 	}
 	
 	// 民宿レビュー一覧の表示（10件ずつ表示）
