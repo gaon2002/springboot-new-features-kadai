@@ -61,8 +61,8 @@
 <!--									th:field属性　各入力項目とフォームクラスのフィールドを関連付けさせる-->
 <!--										th:fieldを設定するとid属性も同じ値になる-->
 										
-										<select class="form-control form-select" name="score" autofocus>
-											<option value="" hidden>選択してください</option> 
+										<select class="form-control form-select samuraitravel-star" name="score" autofocus>
+											<option value="" hidden class="samuraitravel-star">選択してください</option> 
 											<option class="samuraitravel-star" value="5" th:selected="*{score == 5}">★★★★★</option>
 											<option class="samuraitravel-star" value="4" th:selected="*{score == 4}">★★★★☆</option>
 											<option class="samuraitravel-star" value="3" th:selected="*{score == 3}">★★★☆☆</option>

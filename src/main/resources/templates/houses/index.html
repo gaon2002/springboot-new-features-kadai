@@ -154,7 +154,7 @@
 <!--							・housePage.getTotalElements()：要素の総数（検索結果の件数）-->
 <!--							・housePage.getNumber() + 1：現在のページ番号（0から始まるので1を加算し、ユーザーがわかりやすいようにする）-->
 <!--							・housePage.getTotalPages()：総ページ数-->
-							<p th:if="${housePage.getTotalPages() > 1}" class="fs-5 mb-3" th:text="${'検索結果：' + housePage.getTotalElements() + '件' + '(' + (housePage.getNumber() + 1) + '/' + housePage.getTotalPages() + 'ページ'}"></p>
+							<p th:if="${housePage.getTotalPages() > 1}" class="fs-5 mb-3" th:text="${'検索結果：' + housePage.getTotalElements() + '件' + '(' + (housePage.getNumber() + 1) + '/' + housePage.getTotalPages() + 'ページ)'}"></p>
 							<p th:unless="${housePage.getTotalPages() > 1}" class="fs-5 mb-3" th:text="${'検索結果：' + housePage.getTotalElements() + '件'}"></p>
 							
 <!--						■並べ替えフォーム-->

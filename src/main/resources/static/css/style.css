@@ -111,7 +111,20 @@ footer{
 .samuraitravel-star {
     color: orange;
 }
-
+.samuraitravel-text-only-btn{
+    background: none; /* 背景をなしに設定 */
+    border: none; /* ボーダーをなしに設定 */
+    padding: 0; /* パディングをなしに設定 */
+    margin: 0; /* マージンをなしに設定 */
+    color: #5196a6;; /* 親の文字色を継承 */
+    font: inherit; /* 親のフォント設定を継承 */
+    cursor: pointer; /* カーソルをポインタに設定 */
+    outline: none; /* フォーカス時のアウトラインを非表示に設定 */
+}
+.samuraitravel-text-only-btn:focus,
+.samuraitravel-text-only-btn:active {
+    outline: none; /* フォーカス時やアクティブ時のアウトラインを非表示に設定 */
+}
 
 
 @media screen and (min-width: 1400px){

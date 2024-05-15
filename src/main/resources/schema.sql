@@ -78,5 +78,16 @@ CREATE TABLE IF NOT EXISTS users (
      FOREIGN KEY (user_id) REFERENCES users (id)
  );
  
+   -- お気に入り用テーブルを作成
+  CREATE TABLE IF NOT EXISTS favorite (
+     id			 INT			NOT NULL AUTO_INCREMENT PRIMARY KEY,
+     house_id	 INT			NOT NULL,
+     user_id	 INT			NOT NULL,
+     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+     FOREIGN KEY (house_id) REFERENCES houses (id),
+     FOREIGN KEY (user_id) REFERENCES users (id)
+ );
+ 
  
  

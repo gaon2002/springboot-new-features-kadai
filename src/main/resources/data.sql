@@ -102,3 +102,23 @@ INSERT IGNORE INTO reviews (id,house_id,user_id,score,comment) VALUES (9,1,9,2, 
 INSERT IGNORE INTO reviews (id,house_id,user_id,score,comment) VALUES (10,1,10,2, '値段が高いわりに施設が整備されておらず、壊れているものもあった');
 INSERT IGNORE INTO reviews (id,house_id,user_id,score,comment) VALUES (11,1,11,1, '二度と行きたくない！');
 INSERT IGNORE INTO reviews (id,house_id,user_id,score,comment) VALUES (12,1,12,5, '立地も設備も非常に素晴らしく、２回でも３回でも行きたくなる。');
+
+-- favoriteテーブル
+INSERT IGNORE INTO favorite (id,house_id,user_id) VALUES (1,1,1);
+INSERT IGNORE INTO favorite (id,house_id,user_id) VALUES (2,2,1);
+INSERT IGNORE INTO favorite (id,house_id,user_id) VALUES (3,3,1);
+INSERT IGNORE INTO favorite (id,house_id,user_id) VALUES (4,11,1);
+INSERT IGNORE INTO favorite (id,house_id,user_id) VALUES (5,12,1);
+INSERT IGNORE INTO favorite (id,house_id,user_id) VALUES (6,13,1);
+INSERT IGNORE INTO favorite (id,house_id,user_id) VALUES (7,18,1);
+INSERT IGNORE INTO favorite (id,house_id,user_id) VALUES (8,21,1);
+INSERT IGNORE INTO favorite (id,house_id,user_id) VALUES (9,22,1);
+INSERT IGNORE INTO favorite (id,house_id,user_id) VALUES (10,27,1);
+INSERT IGNORE INTO favorite (id,house_id,user_id) VALUES (11,29,1);
+INSERT IGNORE INTO favorite (id,house_id,user_id) VALUES (12,31,1);
+INSERT IGNORE INTO favorite (id,house_id,user_id) VALUES (13,32,1);
+INSERT IGNORE INTO favorite (id,house_id,user_id) VALUES (14,35,1);
+INSERT IGNORE INTO favorite (id,house_id,user_id) VALUES (15,41,1);
+INSERT IGNORE INTO favorite (id,house_id,user_id) VALUES (16,42,1);
+INSERT IGNORE INTO favorite (id,house_id,user_id) VALUES (17,43,1);
+INSERT IGNORE INTO favorite (id,house_id,user_id) VALUES (18,45,1);

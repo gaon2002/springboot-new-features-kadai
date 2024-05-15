@@ -19,13 +19,34 @@
 				<div class="container pt-4 pb-5 samuraitravel-container">
 					<div class="row justify-content-center">
 						<div class="col-xxl-9 col-xl-10 col-lg-11">
-							<nav class="mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+							<nav class="mb-4 d-flex justify-content-between" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
 								<ol class="breadcrumb mb-0">
 									<li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>
 									<li class="breadcrumb-item"><a th:href="@{/houses}">民宿一覧</a></li>
 									<li class="breadcrumb-item active" aria-current="page">民宿詳細</a></li>
 								</ol>
+								
+								<div sec:authorize="isAuthenticated()" class="row justify-content-center mb-4">
+<!--								■お気に入り登録-->
+<!--								 hasUserAlreadyFavorited=false-->
+									<div th:unless="${hasUserAlreadyFavorited}"> 
+										<form method="post" th:action="@{/favorite/addFavorite}">
+											<input type="hidden" name="houseId" th:value="${house.getId()}">
+										    <button type="submit" class="samuraitravel-text-only-btn">&#9825 お気に入り登録</button>
+										</form>
+									</div>
+<!--								■お気に入り解除-->
+<!--								 hasUserAlreadyFavorited=true-->
+									<div th:if="${hasUserAlreadyFavorited}">
+										<form  method="post" th:action="@{/favorite/delete}"class="text-right">
+											<input type="hidden" name="houseId" th:value="${house.getId()}">
+										    <button type="submit" class="samuraitravel-text-only-btn">&#9829 お気に入り解除</button>
+										</form>
+									</div>
+								</div>
+								
 							</nav>
+							
 							
 							<h1 class="mb-4 text-center" th:text="${house.getName()}"></h1>
 							

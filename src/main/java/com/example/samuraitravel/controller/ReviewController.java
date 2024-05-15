@@ -28,17 +28,15 @@ import com.example.samuraitravel.service.ReviewService;
 @Controller
 
 public class ReviewController {
+	
 	private final ReviewRepository reviewRepository;
 	private final ReviewService reviewService;
 	private final HouseRepository houseRepository;
-	private final UserRepository userRepository;
-
 	
 	public ReviewController(UserRepository userRepository, ReviewRepository reviewRepository, ReviewService reviewService, HouseRepository houseRepository) {
 		this.reviewRepository = reviewRepository;
 		this.reviewService = reviewService;
 		this.houseRepository = houseRepository;
-		this.userRepository = userRepository;
 	}
 	
 	// 民宿レビュー一覧の表示（10件ずつ表示）
@@ -47,7 +45,6 @@ public class ReviewController {
 	// @AuthenticationPrincipalアノテーションを使用し、認証されたユーザーの情報をUserDetailsオブジェクトとして受け取る。
 	public String review(@PageableDefault(page = 0, size = 10, sort = "id", direction = Direction.ASC) Pageable pageable, @PathVariable(name = "id") Integer id, Model model) {
 
-		// userDetailsImpl.getUser()で、Userエンティティ全体を保持し情報にアクセスできるようになる
 		House house = houseRepository.getReferenceById(id);
 		
 		Page<Review> houseReviews = reviewRepository.findAllByHouse(house, pageable);
@@ -65,8 +62,6 @@ public class ReviewController {
     public String register(@PathVariable(name = "id") Integer id, Model model) {
 		
 		House house = houseRepository.getReferenceById(id);
-		
-		 System.out.println("出力されているidは：" + id);
 		
 		model.addAttribute("house", house);
 		model.addAttribute("reviewInputForm", new ReviewInputForm());

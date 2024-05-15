@@ -21,6 +21,7 @@ import com.example.samuraitravel.form.ReservationInputForm;
 import com.example.samuraitravel.repository.HouseRepository;
 import com.example.samuraitravel.repository.ReviewRepository;
 import com.example.samuraitravel.security.UserDetailsImpl;
+import com.example.samuraitravel.service.FavoriteService;
 import com.example.samuraitravel.service.ReviewService;
 
 @Controller
@@ -29,11 +30,13 @@ public class HouseController {
 	private final HouseRepository houseRepository;
 	private final ReviewRepository reviewRepository;
 	private final ReviewService reviewService;
+	private final FavoriteService favoriteService;
 	
-	public HouseController(HouseRepository houseRepository, ReviewRepository reviewRepository, ReviewService reviewService) {
+	public HouseController(HouseRepository houseRepository, ReviewRepository reviewRepository, ReviewService reviewService, FavoriteService favoriteService) {
 		this.houseRepository = houseRepository;
 		this.reviewRepository = reviewRepository;
 		this.reviewService = reviewService;
+		this.favoriteService = favoriteService;
 	}
 	
 	@GetMapping
@@ -87,10 +90,12 @@ public class HouseController {
 	public String show(@PathVariable(name = "id") Integer id, Model model, @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
 		House house = houseRepository.getReferenceById(id);
 		boolean hasUserAlreadyReviewed = false;
+		boolean hasUserAlreadyFavorited = false;
 		
 		if(userDetailsImpl != null) {
 			User user = userDetailsImpl.getUser();
 			hasUserAlreadyReviewed = reviewService.hasUserAlreadyReviewed(house, user);
+			hasUserAlreadyFavorited = favoriteService.hasUserAlreadyFavorited(house, user);
 		}
 		
 		// 対象の民宿のコメントを6件表示する(引数のhouseはReviewEntityで設定したhouse)
@@ -101,6 +106,7 @@ public class HouseController {
 			model.addAttribute("house", house);
 			model.addAttribute("reservationInputForm", new ReservationInputForm());
 			model.addAttribute("reviews", newReviews);
+			model.addAttribute("hasUserAlreadyFavorited", hasUserAlreadyFavorited);
 			model.addAttribute("hasUserAlreadyReviewed", hasUserAlreadyReviewed);
 			model.addAttribute("totalReviewCount", totalReviewCount);
 		
@@ -110,4 +116,6 @@ public class HouseController {
 	}
 	
 }
+
+
 
