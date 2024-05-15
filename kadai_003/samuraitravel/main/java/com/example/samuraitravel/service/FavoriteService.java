@@ -16,13 +16,9 @@ public class FavoriteService {
 	
     @Autowired
     private FavoriteRepository favoriteRepository; // お気に入り情報をデータベースに保存するためのリポジトリ
-    private HouseRepository houseRepository;
-    private UserRepository userRepository;
     
     public FavoriteService(HouseRepository houseRepository, FavoriteRepository favoriteRepository, UserRepository userRepository) {
     	this.favoriteRepository = favoriteRepository;
-        this.houseRepository = houseRepository;
-        this.userRepository =  userRepository;
     }
 
 //  ■お気に入り登録
