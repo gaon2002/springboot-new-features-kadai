@@ -1,5 +1,0 @@
-INDEX VERSION 1.134+C:\pleiades\2023-12\spring_boot\samuraitravel\.metadata\.plugins\org.eclipse.jdt.core
-824199086.index
-1865797976.index
-2602472033.index
-1015328028.index
